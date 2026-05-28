@@ -1,6 +1,6 @@
-import { Text } from 'react-native';
+import { Text } from "react-native";
 
-import ScreenContainer from '../components/ui/ScreenContainer';
+import ScreenContainer from "../components/ui/ScreenContainer";
 
 export default function NotificationsScreen() {
   return (
