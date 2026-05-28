@@ -1,12 +1,19 @@
-import { Text, View } from 'react-native';
-import "./global.css"
+import "react-native-gesture-handler";
+
+import "./global.css";
+
+import StackRoutes from "./src/routes/stack.routes";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { NavigationContainer } from "@react-navigation/native";
+import { StatusBar } from "react-native";
 
 export default function App() {
   return (
-    <View className="flex-1 items-center justify-center bg-white">
-      <Text className="text-xl font-bold text-blue-500">
-        Welcome to Nativewind!
-      </Text>
-    </View>
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <StatusBar hidden />
+        <StackRoutes />
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 }
