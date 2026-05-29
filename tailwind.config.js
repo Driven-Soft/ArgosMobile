@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+const { COLORS, FONTS } = require("./src/constants/theme");
+
 module.exports = {
   // Include every file that can declare NativeWind className strings.
   content: [
@@ -8,7 +10,15 @@ module.exports = {
   ],
   presets: [require("nativewind/preset")],
   theme: {
-    extend: {},
+    extend: {
+      colors: COLORS,
+      fontFamily: {
+        regular: [FONTS.regular],
+        medium: [FONTS.medium],
+        semibold: [FONTS.semibold],
+        bold: [FONTS.bold],
+      },
+    },
   },
   plugins: [],
-}
+};

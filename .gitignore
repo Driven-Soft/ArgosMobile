@@ -39,3 +39,7 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# AI
+CLAUDE.md
+ARGOS_SPEC.md

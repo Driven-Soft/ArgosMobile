@@ -21,3 +21,10 @@ export const COLORS = {
   // Auxiliares
   error: "#ba1a1a", // Cor de erro do sistema
 };
+
+export const FONTS = {
+  regular: "PublicSans_400Regular",
+  medium: "PublicSans_500Medium",
+  semibold: "PublicSans_600SemiBold",
+  bold: "PublicSans_700Bold",
+};
