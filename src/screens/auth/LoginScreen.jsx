@@ -14,6 +14,7 @@ import { Ionicons } from "@expo/vector-icons";
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import TextField from "../../components/ui/TextField";
 import { COLORS } from "../../constants/theme";
+import { maskEmail, isValidEmail } from "../../utils/masks";
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("");
@@ -24,6 +25,7 @@ export default function LoginScreen({ navigation }) {
   function validate() {
     const next = {};
     if (!email.trim()) next.email = "E-mail é obrigatório.";
+    else if (!isValidEmail(email)) next.email = "E-mail inválido.";
     if (!password) next.password = "Senha é obrigatória.";
     setErrors(next);
     return Object.keys(next).length === 0;
@@ -83,7 +85,7 @@ export default function LoginScreen({ navigation }) {
             label="E-mail"
             value={email}
             onChangeText={(v) => {
-              setEmail(v);
+              setEmail(maskEmail(v));
               if (errors.email) setErrors((p) => ({ ...p, email: null }));
             }}
             placeholder="seu@email.com"

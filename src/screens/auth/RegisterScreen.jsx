@@ -15,11 +15,25 @@ import { Ionicons } from "@expo/vector-icons";
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import TextField from "../../components/ui/TextField";
 import { COLORS } from "../../constants/theme";
+import {
+  maskName,
+  maskEmail,
+  maskPhone,
+  isValidEmail,
+  isValidPhone,
+} from "../../utils/masks";
+
+const MASKS = {
+  name: maskName,
+  email: maskEmail,
+  phone: maskPhone,
+};
 
 export default function RegisterScreen({ navigation }) {
   const [form, setForm] = useState({
     name: "",
     email: "",
+    phone: "",
     password: "",
     confirmPassword: "",
   });
@@ -27,16 +41,20 @@ export default function RegisterScreen({ navigation }) {
   const [loading, setLoading] = useState(false);
 
   function updateField(field, value) {
-    setForm((prev) => ({ ...prev, [field]: value }));
+    const masked = MASKS[field] ? MASKS[field](value) : value;
+    setForm((prev) => ({ ...prev, [field]: masked }));
     if (errors[field]) setErrors((prev) => ({ ...prev, [field]: null }));
   }
 
   function validate() {
     const next = {};
     if (!form.name.trim()) next.name = "Nome é obrigatório.";
+    else if (form.name.trim().split(/\s+/).length < 2)
+      next.name = "Informe nome e sobrenome.";
     if (!form.email.trim()) next.email = "E-mail é obrigatório.";
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim()))
-      next.email = "E-mail inválido.";
+    else if (!isValidEmail(form.email)) next.email = "E-mail inválido.";
+    if (!form.phone.trim()) next.phone = "Telefone é obrigatório.";
+    else if (!isValidPhone(form.phone)) next.phone = "Telefone inválido.";
     if (!form.password) next.password = "Senha é obrigatória.";
     else if (form.password.length < 6)
       next.password = "A senha deve ter pelo menos 6 caracteres.";
@@ -54,6 +72,7 @@ export default function RegisterScreen({ navigation }) {
       const user = {
         name: form.name.trim(),
         email: form.email.trim().toLowerCase(),
+        phone: form.phone.trim(),
         password: form.password,
         createdAt: new Date().toISOString(),
       };
@@ -113,6 +132,15 @@ export default function RegisterScreen({ navigation }) {
               keyboardType="email-address"
               autoCapitalize="none"
               error={errors.email}
+            />
+            <TextField
+              label="Telefone"
+              value={form.phone}
+              onChangeText={(v) => updateField("phone", v)}
+              placeholder="(11) 90000-0000"
+              keyboardType="phone-pad"
+              maxLength={15}
+              error={errors.phone}
             />
             <TextField
               label="Senha"

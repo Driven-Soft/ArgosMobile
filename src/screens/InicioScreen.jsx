@@ -161,7 +161,6 @@ export default function InicioScreen({ navigation }) {
           </View>
         </View>
 
-        {/* Chamada final */}
         <View className="items-center px-8 pt-8">
           <Ionicons
             name="arrow-up-circle-outline"
