@@ -15,6 +15,7 @@ import MapView, { Marker } from "react-native-maps";
 import { Ionicons } from "@expo/vector-icons";
 
 import ScreenHeader from "../../components/ui/ScreenHeader";
+import PrimaryButton from "../../components/ui/PrimaryButton";
 import { createIncident } from "../../services/api/incidents";
 import { getCurrentLocation } from "../../services/location";
 import { INCIDENT_TYPES } from "../../constants/incidents";
@@ -202,25 +203,13 @@ export default function RegistrarOcorrenciaScreen({ navigation }) {
               )}
             </Field>
 
-            <TouchableOpacity
-              className={`mt-1 items-center rounded-[14px] bg-primary py-[17px] shadow-md ${
-                submitting ? "opacity-70" : ""
-              }`}
-              onPress={handleSubmit}
-              activeOpacity={0.85}
-              disabled={submitting}
-            >
-              {submitting ? (
-                <ActivityIndicator color="#ffffff" />
-              ) : (
-                <Text
-                  className="text-base tracking-wide text-white"
-                  style={{ fontFamily: FONTS.semibold }}
-                >
-                  Registrar ocorrência
-                </Text>
-              )}
-            </TouchableOpacity>
+            <View className="mt-1">
+              <PrimaryButton
+                title="Registrar ocorrência"
+                onPress={handleSubmit}
+                loading={submitting}
+              />
+            </View>
           </ScrollView>
         </KeyboardAvoidingView>
       </View>

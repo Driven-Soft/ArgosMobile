@@ -2,23 +2,22 @@ import { useState } from "react";
 import {
   View,
   Text,
-  TextInput,
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
-  ActivityIndicator,
   Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
 
+import PrimaryButton from "../../components/ui/PrimaryButton";
+import TextField from "../../components/ui/TextField";
 import { COLORS } from "../../constants/theme";
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
@@ -80,81 +79,33 @@ export default function LoginScreen({ navigation }) {
         </View>
 
         <View className="gap-5 mb-8">
-          <View className="gap-1.5">
-            <Text className="text-sm font-medium text-textColor">E-mail</Text>
-            <View
-              className={`flex-row items-center border-[1.5px] rounded-xl px-3.5 ${errors.email ? "border-error" : "border-borderColor"} bg-surface`}
-            >
-              <TextInput
-                className="flex-1 py-3.5 text-[15px] font-regular text-textColor"
-                value={email}
-                onChangeText={(v) => {
-                  setEmail(v);
-                  if (errors.email) setErrors((p) => ({ ...p, email: null }));
-                }}
-                placeholder="seu@email.com"
-                placeholderTextColor={COLORS.outlineColor}
-                keyboardType="email-address"
-                autoCapitalize="none"
-              />
-            </View>
-            {errors.email && (
-              <Text className="text-xs font-regular text-error">
-                {errors.email}
-              </Text>
-            )}
-          </View>
+          <TextField
+            label="E-mail"
+            value={email}
+            onChangeText={(v) => {
+              setEmail(v);
+              if (errors.email) setErrors((p) => ({ ...p, email: null }));
+            }}
+            placeholder="seu@email.com"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            error={errors.email}
+          />
 
-          <View className="gap-1.5">
-            <Text className="text-sm font-medium text-textColor">Senha</Text>
-            <View
-              className={`flex-row items-center border-[1.5px] rounded-xl px-3.5 ${errors.password ? "border-error" : "border-borderColor"} bg-surface`}
-            >
-              <TextInput
-                className="flex-1 py-3.5 text-[15px] font-regular text-textColor"
-                value={password}
-                onChangeText={(v) => {
-                  setPassword(v);
-                  if (errors.password)
-                    setErrors((p) => ({ ...p, password: null }));
-                }}
-                placeholder="Sua senha"
-                placeholderTextColor={COLORS.outlineColor}
-                secureTextEntry={!showPassword}
-              />
-              <TouchableOpacity
-                className="pl-2"
-                onPress={() => setShowPassword((v) => !v)}
-              >
-                <Ionicons
-                  name={showPassword ? "eye-off-outline" : "eye-outline"}
-                  size={20}
-                  color={COLORS.outlineColor}
-                />
-              </TouchableOpacity>
-            </View>
-            {errors.password && (
-              <Text className="text-xs font-regular text-error">
-                {errors.password}
-              </Text>
-            )}
-          </View>
+          <TextField
+            label="Senha"
+            value={password}
+            onChangeText={(v) => {
+              setPassword(v);
+              if (errors.password) setErrors((p) => ({ ...p, password: null }));
+            }}
+            placeholder="Sua senha"
+            secureTextEntry
+            error={errors.password}
+          />
         </View>
 
-        <TouchableOpacity
-          className={`rounded-[14px] py-[17px] items-center shadow-md bg-primary ${loading ? "opacity-70" : ""}`}
-          onPress={handleLogin}
-          activeOpacity={0.85}
-          disabled={loading}
-        >
-          {loading ? (
-            <ActivityIndicator color="#ffffff" />
-          ) : (
-            <Text className="text-base tracking-wide font-semibold text-white">
-              Entrar
-            </Text>
-          )}
-        </TouchableOpacity>
+        <PrimaryButton title="Entrar" onPress={handleLogin} loading={loading} />
 
         <TouchableOpacity
           className="items-center mt-5"

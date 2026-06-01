@@ -2,18 +2,18 @@ import { useState } from "react";
 import {
   View,
   Text,
-  TextInput,
   TouchableOpacity,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
-  ActivityIndicator,
   Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
 
+import PrimaryButton from "../../components/ui/PrimaryButton";
+import TextField from "../../components/ui/TextField";
 import { COLORS } from "../../constants/theme";
 
 export default function RegisterScreen({ navigation }) {
@@ -23,8 +23,6 @@ export default function RegisterScreen({ navigation }) {
     password: "",
     confirmPassword: "",
   });
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
@@ -99,7 +97,7 @@ export default function RegisterScreen({ navigation }) {
           </View>
 
           <View className="gap-5 mb-8">
-            <Field
+            <TextField
               label="Nome completo"
               value={form.name}
               onChangeText={(v) => updateField("name", v)}
@@ -107,7 +105,7 @@ export default function RegisterScreen({ navigation }) {
               autoCapitalize="words"
               error={errors.name}
             />
-            <Field
+            <TextField
               label="E-mail"
               value={form.email}
               onChangeText={(v) => updateField("email", v)}
@@ -116,60 +114,29 @@ export default function RegisterScreen({ navigation }) {
               autoCapitalize="none"
               error={errors.email}
             />
-            <Field
+            <TextField
               label="Senha"
               value={form.password}
               onChangeText={(v) => updateField("password", v)}
               placeholder="Mínimo 6 caracteres"
-              secureTextEntry={!showPassword}
+              secureTextEntry
               error={errors.password}
-              trailing={
-                <TouchableOpacity onPress={() => setShowPassword((v) => !v)}>
-                  <Ionicons
-                    name={showPassword ? "eye-off-outline" : "eye-outline"}
-                    size={20}
-                    color={COLORS.outlineColor}
-                  />
-                </TouchableOpacity>
-              }
             />
-            <Field
+            <TextField
               label="Confirmar senha"
               value={form.confirmPassword}
               onChangeText={(v) => updateField("confirmPassword", v)}
               placeholder="Repita a senha"
-              secureTextEntry={!showConfirmPassword}
+              secureTextEntry
               error={errors.confirmPassword}
-              trailing={
-                <TouchableOpacity
-                  onPress={() => setShowConfirmPassword((v) => !v)}
-                >
-                  <Ionicons
-                    name={
-                      showConfirmPassword ? "eye-off-outline" : "eye-outline"
-                    }
-                    size={20}
-                    color={COLORS.outlineColor}
-                  />
-                </TouchableOpacity>
-              }
             />
           </View>
 
-          <TouchableOpacity
-            className={`rounded-[14px] py-[17px] items-center shadow-md bg-primary ${loading ? "opacity-70" : ""}`}
+          <PrimaryButton
+            title="Criar conta"
             onPress={handleRegister}
-            activeOpacity={0.85}
-            disabled={loading}
-          >
-            {loading ? (
-              <ActivityIndicator color="#ffffff" />
-            ) : (
-              <Text className="text-base tracking-wide font-semibold text-white">
-                Criar conta
-              </Text>
-            )}
-          </TouchableOpacity>
+            loading={loading}
+          />
 
           <TouchableOpacity
             className="items-center mt-5"
@@ -183,27 +150,5 @@ export default function RegisterScreen({ navigation }) {
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
-  );
-}
-
-function Field({ label, error, trailing, ...inputProps }) {
-  const hasError = !!error;
-  return (
-    <View className="gap-1.5">
-      <Text className="text-sm font-medium text-textColor">{label}</Text>
-      <View
-        className={`flex-row items-center border-[1.5px] rounded-xl px-3.5 ${hasError ? "border-error" : "border-borderColor"} bg-surface`}
-      >
-        <TextInput
-          className="flex-1 py-3.5 text-[15px] font-regular text-textColor"
-          placeholderTextColor={COLORS.outlineColor}
-          {...inputProps}
-        />
-        {trailing && <View className="pl-2">{trailing}</View>}
-      </View>
-      {hasError && (
-        <Text className="text-xs font-regular text-error">{error}</Text>
-      )}
-    </View>
   );
 }

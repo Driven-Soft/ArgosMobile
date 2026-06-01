@@ -14,16 +14,16 @@ import MapView, { Marker } from "react-native-maps";
 import { Ionicons } from "@expo/vector-icons";
 
 import ScreenHeader from "../../components/ui/ScreenHeader";
+import RiskBadge from "../../components/ui/RiskBadge";
+import StatusPill from "../../components/ui/StatusPill";
 import { fetchComments } from "../../services/api/incidents";
 import { RISK_LEVELS } from "../../services/risk";
-import { INCIDENT_STATUS } from "../../constants/incidents";
 import { COLORS, FONTS } from "../../constants/theme";
 import { formatRelativeTime, formatDistance } from "../../utils/format";
 
 export default function DetalheOcorrenciaScreen({ route, navigation }) {
   const { incident } = route.params;
   const risk = RISK_LEVELS[incident.riskLevel] ?? RISK_LEVELS.baixo;
-  const status = INCIDENT_STATUS[incident.status] ?? INCIDENT_STATUS.em_analise;
 
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -105,17 +105,7 @@ export default function DetalheOcorrenciaScreen({ route, navigation }) {
 
             <View className="gap-4 px-5 pt-4">
               <View className="flex-row items-center justify-between">
-                <View
-                  className="rounded-md px-2.5 py-1"
-                  style={{ backgroundColor: risk.color }}
-                >
-                  <Text
-                    className="text-[10px] uppercase tracking-wide text-white"
-                    style={{ fontFamily: FONTS.bold }}
-                  >
-                    {risk.label}
-                  </Text>
-                </View>
+                <RiskBadge level={incident.riskLevel} />
                 <Text
                   className="text-[12px] text-textMutedColor"
                   style={{ fontFamily: FONTS.regular }}
@@ -149,21 +139,7 @@ export default function DetalheOcorrenciaScreen({ route, navigation }) {
                 </View>
               </View>
 
-              <View
-                className="flex-row items-center gap-2 self-start rounded-full px-3 py-1.5"
-                style={{ backgroundColor: status.color + "1f" }}
-              >
-                <View
-                  className="h-2 w-2 rounded-full"
-                  style={{ backgroundColor: status.color }}
-                />
-                <Text
-                  className="text-[12px]"
-                  style={{ fontFamily: FONTS.semibold, color: status.color }}
-                >
-                  {status.label}
-                </Text>
-              </View>
+              <StatusPill status={incident.status} />
 
               <Section title="Descrição">
                 <Text

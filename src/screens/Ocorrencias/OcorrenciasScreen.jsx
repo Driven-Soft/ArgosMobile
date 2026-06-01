@@ -14,9 +14,12 @@ import MapView, { Marker } from "react-native-maps";
 import { Ionicons } from "@expo/vector-icons";
 
 import ScreenHeader from "../../components/ui/ScreenHeader";
+import RiskBadge from "../../components/ui/RiskBadge";
+import StatusPill from "../../components/ui/StatusPill";
+import FAB from "../../components/ui/FAB";
 import { fetchIncidents } from "../../services/api/incidents";
 import { RISK_LEVELS } from "../../services/risk";
-import { INCIDENT_TYPES, INCIDENT_STATUS } from "../../constants/incidents";
+import { INCIDENT_TYPES } from "../../constants/incidents";
 import { COLORS, FONTS } from "../../constants/theme";
 import { formatRelativeTime, formatDistance } from "../../utils/format";
 
@@ -124,14 +127,7 @@ export default function OcorrenciasScreen({ navigation }) {
           }
         />
 
-        <TouchableOpacity
-          className="absolute bottom-6 right-5 h-14 w-14 items-center justify-center rounded-full shadow-lg"
-          style={{ backgroundColor: COLORS.error }}
-          onPress={openRegister}
-          activeOpacity={0.85}
-        >
-          <Ionicons name="notifications" size={26} color="#ffffff" />
-        </TouchableOpacity>
+        <FAB icon="notifications" color={COLORS.error} onPress={openRegister} />
       </View>
     </SafeAreaView>
   );
@@ -194,9 +190,6 @@ function TypeChips({ active, onChange }) {
 }
 
 function IncidentCard({ incident, onPress }) {
-  const risk = RISK_LEVELS[incident.riskLevel] ?? RISK_LEVELS.baixo;
-  const status = INCIDENT_STATUS[incident.status] ?? INCIDENT_STATUS.em_analise;
-
   return (
     <TouchableOpacity
       className="overflow-hidden rounded-2xl bg-surface shadow-sm"
@@ -206,17 +199,7 @@ function IncidentCard({ incident, onPress }) {
       <View className="flex-row items-start p-4">
         <View className="flex-1 gap-2">
           <View className="flex-row items-center justify-between">
-            <View
-              className="rounded-md px-2.5 py-1"
-              style={{ backgroundColor: risk.color }}
-            >
-              <Text
-                className="text-[10px] uppercase tracking-wide text-white"
-                style={{ fontFamily: FONTS.bold }}
-              >
-                {risk.label}
-              </Text>
-            </View>
+            <RiskBadge level={incident.riskLevel} />
             <Text
               className="text-[12px] text-textMutedColor"
               style={{ fontFamily: FONTS.regular }}
@@ -251,21 +234,7 @@ function IncidentCard({ incident, onPress }) {
         />
       </View>
 
-      <View
-        className="flex-row items-center gap-2 px-4 py-2.5"
-        style={{ backgroundColor: status.color + "14" }}
-      >
-        <View
-          className="h-2 w-2 rounded-full"
-          style={{ backgroundColor: status.color }}
-        />
-        <Text
-          className="text-[12px]"
-          style={{ fontFamily: FONTS.medium, color: status.color }}
-        >
-          {status.label}
-        </Text>
-      </View>
+      <StatusPill status={incident.status} variant="bar" />
     </TouchableOpacity>
   );
 }

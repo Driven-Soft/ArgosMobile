@@ -1,15 +1,14 @@
-import { View, Text, TouchableOpacity, Image } from "react-native";
+import { View, Text, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const argosLogo = require("../../assets/images/ArgosLogo.png");
-const argosLogoTitle = require("../../assets/images/ArgosLogoTitle.png");
+import PrimaryButton from "../components/ui/PrimaryButton";
 
 export default function WelcomeScreen({ navigation }) {
   return (
     <SafeAreaView className="flex-1 px-6 bg-background">
       <View className="items-center pt-5">
         <Image
-          source={argosLogo}
+          source={require("../../assets/images/ArgosLogo.png")}
           className="w-14 h-14 opacity-10"
           resizeMode="contain"
         />
@@ -17,7 +16,7 @@ export default function WelcomeScreen({ navigation }) {
 
       <View className="flex-1 justify-center items-center px-2 gap-4">
         <Image
-          source={argosLogoTitle}
+          source={require("../../assets/images/ArgosLogoTitle.png")}
           className="w-40 h-10 mb-2"
           resizeMode="contain"
         />
@@ -31,25 +30,16 @@ export default function WelcomeScreen({ navigation }) {
       </View>
 
       <View className="pb-5 gap-3">
-        <TouchableOpacity
-          className="rounded-[14px] py-[17px] items-center shadow-md bg-primary"
+        <PrimaryButton
+          title="Cadastre-se"
           onPress={() => navigation.navigate("Register")}
-          activeOpacity={0.85}
-        >
-          <Text className="text-base tracking-wide font-semibold text-white">
-            Cadastre-se
-          </Text>
-        </TouchableOpacity>
+        />
 
-        <TouchableOpacity
-          className="border-[1.5px] border-primary rounded-[14px] py-[17px] items-center"
+        <PrimaryButton
+          title="Já tenho uma conta"
+          variant="outline"
           onPress={() => navigation.navigate("Login")}
-          activeOpacity={0.85}
-        >
-          <Text className="text-base tracking-wide font-semibold text-primary">
-            Já tenho uma conta
-          </Text>
-        </TouchableOpacity>
+        />
 
         <Text className="text-xs text-center mt-1 leading-[18px] font-regular text-textMutedColor">
           Ao continuar, você concorda com os nossos{" "}
