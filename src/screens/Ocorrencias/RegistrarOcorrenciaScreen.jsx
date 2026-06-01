@@ -14,6 +14,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import MapView, { Marker } from "react-native-maps";
 import { Ionicons } from "@expo/vector-icons";
 
+import ScreenHeader from "../../components/ui/ScreenHeader";
 import { createIncident } from "../../services/api/incidents";
 import { getCurrentLocation } from "../../services/location";
 import { INCIDENT_TYPES } from "../../constants/incidents";
@@ -82,21 +83,10 @@ export default function RegistrarOcorrenciaScreen({ navigation }) {
   return (
     <SafeAreaView style={{ flex: 1 }} edges={["top", "left", "right"]}>
       <View className="flex-1 bg-background">
-        <View className="flex-row items-center gap-3 border-b border-borderColor/50 bg-surface px-4 py-3 shadow-sm">
-          <TouchableOpacity
-            className="h-9 w-9 items-center justify-center"
-            onPress={() => navigation.goBack()}
-            activeOpacity={0.7}
-          >
-            <Ionicons name="arrow-back" size={22} color={COLORS.textColor} />
-          </TouchableOpacity>
-          <Text
-            className="flex-1 text-[17px]"
-            style={{ fontFamily: FONTS.bold, color: COLORS.textColor }}
-          >
-            Registrar ocorrência
-          </Text>
-        </View>
+        <ScreenHeader
+          title="Registrar ocorrência"
+          onBack={() => navigation.goBack()}
+        />
 
         <KeyboardAvoidingView
           className="flex-1"

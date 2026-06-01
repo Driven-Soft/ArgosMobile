@@ -13,6 +13,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import MapView, { Marker } from "react-native-maps";
 import { Ionicons } from "@expo/vector-icons";
 
+import ScreenHeader from "../../components/ui/ScreenHeader";
 import { fetchIncidents } from "../../services/api/incidents";
 import { RISK_LEVELS } from "../../services/risk";
 import { INCIDENT_TYPES, INCIDENT_STATUS } from "../../constants/incidents";
@@ -68,7 +69,7 @@ export default function OcorrenciasScreen({ navigation }) {
   return (
     <SafeAreaView style={{ flex: 1 }} edges={["top", "left", "right"]}>
       <View className="flex-1 bg-background">
-        <AppBar />
+        <ScreenHeader title="Ocorrências" />
 
         <FlatList
           data={filtered}
@@ -133,31 +134,6 @@ export default function OcorrenciasScreen({ navigation }) {
         </TouchableOpacity>
       </View>
     </SafeAreaView>
-  );
-}
-
-function AppBar() {
-  return (
-    <View className="flex-row items-center justify-between border-b border-borderColor/50 bg-surface px-4 py-3 shadow-sm">
-      <TouchableOpacity
-        className="h-9 w-9 items-center justify-center"
-        activeOpacity={0.7}
-      >
-        <Ionicons name="menu" size={24} color={COLORS.textColor} />
-      </TouchableOpacity>
-      <Text
-        className="text-[18px]"
-        style={{ fontFamily: FONTS.bold, color: COLORS.primary }}
-      >
-        Ocorrências
-      </Text>
-      <TouchableOpacity
-        className="h-9 w-9 items-center justify-center"
-        activeOpacity={0.7}
-      >
-        <Ionicons name="search" size={22} color={COLORS.textColor} />
-      </TouchableOpacity>
-    </View>
   );
 }
 
