@@ -195,7 +195,8 @@ function Field({ label, error, trailing, ...inputProps }) {
         className={`flex-row items-center border-[1.5px] rounded-xl px-3.5 ${hasError ? "border-error" : "border-borderColor"} bg-surface`}
       >
         <TextInput
-          className="flex-1 py-3.5 text-[15px] font-regular text-textColor placeholder:text-outlineColor"
+          className="flex-1 py-3.5 text-[15px] font-regular text-textColor"
+          placeholderTextColor={COLORS.outlineColor}
           {...inputProps}
         />
         {trailing && <View className="pl-2">{trailing}</View>}
