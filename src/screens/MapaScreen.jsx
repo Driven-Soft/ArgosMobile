@@ -50,6 +50,7 @@ export default function MapaScreen() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isFallback, setIsFallback] = useState(false);
+  const [recentering, setRecentering] = useState(false);
 
   const loadRisk = useCallback(async (nextCenter, nextScope) => {
     setLoading(true);
@@ -108,6 +109,20 @@ export default function MapaScreen() {
     setIsFallback(false);
     animateTo(nextCenter);
     loadRisk(nextCenter, scope);
+  }
+
+  async function handleRecenter() {
+    if (recentering) return;
+    setRecentering(true);
+    try {
+      const loc = await getCurrentLocation();
+      setCenter(loc);
+      setIsFallback(loc.isFallback);
+      animateTo(loc, scope);
+      await loadRisk(loc, scope);
+    } finally {
+      setRecentering(false);
+    }
   }
 
   function handleSelectZone(zone) {
@@ -228,6 +243,21 @@ export default function MapaScreen() {
       >
         <RiskLegend />
       </View>
+
+      <TouchableOpacity
+        className="absolute right-4 h-12 w-12 items-center justify-center rounded-full bg-surface shadow-lg"
+        style={{ bottom: 148 }}
+        onPress={handleRecenter}
+        activeOpacity={0.85}
+        disabled={recentering}
+        accessibilityLabel="Recalibrar minha localização"
+      >
+        {recentering ? (
+          <ActivityIndicator size="small" color={COLORS.primary} />
+        ) : (
+          <Ionicons name="locate" size={22} color={COLORS.primary} />
+        )}
+      </TouchableOpacity>
 
       {error && !loading && (
         <View className="absolute inset-x-4 top-1/2 items-center rounded-2xl bg-surface p-4 shadow-lg">

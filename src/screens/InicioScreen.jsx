@@ -61,10 +61,10 @@ export default function InicioScreen({ navigation }) {
             label="Monitoramento"
           />
           <StatCard
-            icon="shield-checkmark"
+            icon="people"
             color={COLORS.riskLow}
-            value="Defesa Civil"
-            label="Resposta direta"
+            value="Comunidade"
+            label="Rede colaborativa"
           />
         </View>
 
@@ -108,7 +108,7 @@ export default function InicioScreen({ navigation }) {
             icon="notifications-outline"
             color={COLORS.riskCritical}
             title="Alertas em Tempo Real"
-            description="Receba avisos imediatos da Defesa Civil sobre situações críticas perto de você."
+            description="Consulte alertas sobre situações críticas perto de você direto pelo app Argos."
             onPress={() => navigation.navigate("Alertas")}
           />
           <FeatureCard
