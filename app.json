@@ -27,7 +27,13 @@
       "bundler": "metro"
     },
     "plugins": [
-      "expo-font"
+      "expo-font",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "O Argos usa sua localização para mostrar o risco de inundação e deslizamento na sua região."
+        }
+      ]
     ]
   }
 }
