@@ -23,8 +23,6 @@ const INCIDENT_ICONS = {
   outro: "alert-circle",
 };
 
-// Converte o espaçamento do grid (graus) num raio de círculo (metros) que
-// gera sobreposição suave entre os pontos vizinhos.
 function circleRadiusFor(spacing) {
   return spacing * 111320 * 0.62;
 }

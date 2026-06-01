@@ -14,7 +14,6 @@ const geocodingClient = axios.create({
 
 const TIMEZONE = "America/Sao_Paulo";
 
-// Espaçamento do grid (graus) por escopo. ~0.1° ≈ 11 km.
 export const GRID_SPACING = {
   cidade: 0.08, // ~9 km — visão local
   estado: 0.3, // ~33 km — visão regional
@@ -72,7 +71,6 @@ export async function fetchRiskGrid(points) {
     },
   });
 
-  // Com múltiplas coordenadas a Open-Meteo devolve um array (1 objeto por ponto).
   const locations = Array.isArray(data) ? data : [data];
 
   return locations.map((loc, index) => {

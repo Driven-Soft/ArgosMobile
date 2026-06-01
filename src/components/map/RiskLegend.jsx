@@ -3,7 +3,6 @@ import { View, Text } from "react-native";
 import { RISK_SCALE } from "../../services/risk";
 import { FONTS } from "../../constants/theme";
 
-// Legenda compacta da escala semântica de risco, sobreposta ao mapa.
 export default function RiskLegend() {
   return (
     <View className="flex-row items-center gap-3 rounded-2xl bg-surface/95 px-3.5 py-2.5 shadow-md">

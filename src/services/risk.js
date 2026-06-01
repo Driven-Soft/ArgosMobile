@@ -1,7 +1,5 @@
 import { COLORS } from "../constants/theme";
 
-// Escala semântica de risco (ARGOS_SPEC §3.2).
-// As cores vêm sempre dos tokens de theme.js — nunca hardcodar hex aqui.
 export const RISK_LEVELS = {
   baixo: {
     key: "baixo",
@@ -29,7 +27,6 @@ export const RISK_LEVELS = {
   },
 };
 
-// Ordem do menor para o maior risco — útil para legendas e ordenação.
 export const RISK_SCALE = [
   RISK_LEVELS.baixo,
   RISK_LEVELS.medio,

@@ -1,9 +1,3 @@
-// Ocorrências reportadas pela comunidade (crowdsourcing — ARGOS_SPEC §4.3).
-// Este módulo exige backend próprio; por ora retorna dados mock locais.
-// Coordenadas ao redor de São Paulo para demonstração.
-
-// createdAt é gerado relativo a "agora" para o tempo decorrido ("Há X min")
-// renderizar de forma coerente independente do relógio do dispositivo.
 const minutesAgo = (min) => new Date(Date.now() - min * 60_000).toISOString();
 
 const MOCK_INCIDENTS = [
@@ -61,7 +55,7 @@ const MOCK_INCIDENTS = [
   },
 ];
 
-// Comentários (chat) por ocorrência — mock em memória.
+// Comentários (chat) por ocorrência — mock em memória. O backend real armazenaria isso num banco de dados.
 const MOCK_COMMENTS = {
   "inc-1": [
     {

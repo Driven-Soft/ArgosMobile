@@ -10,12 +10,7 @@ import AlertCard from "../../components/ui/AlertCard";
 import FAB from "../../components/ui/FAB";
 import { fetchAlerts } from "../../services/api/alerts";
 import { COLORS, FONTS } from "../../constants/theme";
-
-const FILTERS = [
-  { key: "todos", label: "Todos" },
-  { key: "ativos", label: "Ativos" },
-  { key: "criticos", label: "Críticos" },
-];
+import { FILTERS } from "../../constants/alerts";
 
 export default function AlertasScreen({ navigation }) {
   const [alerts, setAlerts] = useState([]);
@@ -47,7 +42,7 @@ export default function AlertasScreen({ navigation }) {
   }, [alerts, activeFilter]);
 
   function openDetail(alert) {
-    navigation.navigate("DetalheAlerta", { alertId: alert.id });
+    navigation.navigate("DetalheAlerta", { alert });
   }
 
   function handleEmitAlert() {

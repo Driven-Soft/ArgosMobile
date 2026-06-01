@@ -1,6 +1,6 @@
 import * as Location from "expo-location";
 
-// Fallback: centro de São Paulo (ARGOS_SPEC usa esta coordenada nos exemplos).
+// Fallback: centro de São Paulo, caso o usuário negue permissão ou ocorra erro.
 export const DEFAULT_LOCATION = {
   latitude: -23.55,
   longitude: -46.63,

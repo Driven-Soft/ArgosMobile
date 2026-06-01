@@ -27,8 +27,7 @@ export default function NearbyZonesSheet({ zones, loading, onSelectZone }) {
     }).start();
     setExpanded((v) => !v);
   }
-
-  // Zonas ordenadas do maior para o menor risco.
+  
   const sorted = [...zones].sort((a, b) => b.risk.score - a.risk.score);
 
   return (

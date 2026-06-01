@@ -49,6 +49,10 @@ export default function PerfilScreen({ navigation }) {
   );
 
   function handleMenuPress(item) {
+    if (item.id === "alerts") {
+      navigation.navigate("Alertas");
+      return;
+    }
     if (item.id === "history") {
       navigation.navigate("Ocorrencias");
       return;
