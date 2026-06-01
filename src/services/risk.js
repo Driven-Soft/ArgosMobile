@@ -60,7 +60,7 @@ export function calcularRiscoDeslizamento(
   const sNorm = Math.min((umidadeSolo || 0) / 0.45, 1); // 0.45 m³/m³ = solo saturado
   const cNorm = Math.min((chuvaAtual || 0) / 20, 1); // 20mm/h = chuva muito forte
 
-  const score = pNorm * 0.45 + sNorm * 0.35 + cNorm * 0.2;
+  const score = pNorm * 0.55 + sNorm * 0.2 + cNorm * 0.25;
   const level = levelFromScore(score);
 
   return {
