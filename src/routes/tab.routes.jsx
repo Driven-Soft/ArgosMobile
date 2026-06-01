@@ -7,7 +7,7 @@ import { COLORS } from "../constants/theme";
 import HomeScreen from "../screens/InicioScreen";
 import MapaScreen from "../screens/MapaScreen";
 import OcorrenciasRoutes from "../routes/ocorrencias.routes";
-import AlertasScreen from "../screens/Alertas/AlertasScreen";
+import AlertasRoutes from "../routes/alertas.routes";
 import PerfilScreen from "../screens/PerfilScreen";
 
 const Tab = createBottomTabNavigator();
@@ -54,7 +54,7 @@ export default function Tabs() {
     >
       <Tab.Screen name="Inicio" component={HomeScreen} />
       <Tab.Screen name="Mapa" component={MapaScreen} />
-      <Tab.Screen name="Alertas" component={AlertasScreen} />
+      <Tab.Screen name="Alertas" component={AlertasRoutes} />
       <Tab.Screen name="Ocorrencias" component={OcorrenciasRoutes} />
       <Tab.Screen name="Perfil" component={PerfilScreen} />
     </Tab.Navigator>
