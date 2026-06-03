@@ -84,7 +84,9 @@ export default function DetalheAlertaScreen({ route, navigation }) {
                   className="mt-0.5 text-[15px] text-textColor"
                   style={{ fontFamily: FONTS.semibold }}
                 >
-                  Válido até {formatDateTime(alert.validUntil)}
+                  {alert.validUntil
+                    ? `Válido até ${formatDateTime(alert.validUntil)}`
+                    : "Vigência não informada"}
                 </Text>
               </View>
             </View>

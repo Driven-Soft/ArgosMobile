@@ -32,11 +32,15 @@ export default function OcorrenciasScreen({ navigation }) {
   useFocusEffect(
     useCallback(() => {
       let active = true;
+      setLoading(true);
       (async () => {
-        const list = await fetchIncidents();
-        if (active) {
-          setIncidents(list);
-          setLoading(false);
+        try {
+          const list = await fetchIncidents();
+          if (active) setIncidents(list);
+        } catch {
+          if (active) setIncidents([]);
+        } finally {
+          if (active) setLoading(false);
         }
       })();
       return () => {
@@ -221,7 +225,10 @@ function IncidentCard({ incident, onPress }) {
               className="text-[13px] text-textMutedColor"
               style={{ fontFamily: FONTS.regular }}
             >
-              {incident.neighborhood}, {formatDistance(incident.distance)}
+              {incident.neighborhood}
+              {incident.distance
+                ? `, ${formatDistance(incident.distance)}`
+                : ""}
             </Text>
           </View>
         </View>

@@ -9,16 +9,18 @@ import {
   Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
 
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import TextField from "../../components/ui/TextField";
+import { createUser } from "../../services/api/users";
+import { saveSession } from "../../services/session";
 import { COLORS } from "../../constants/theme";
 import {
   maskName,
   maskEmail,
   maskPhone,
+  onlyDigits,
   isValidEmail,
   isValidPhone,
 } from "../../utils/masks";
@@ -69,18 +71,33 @@ export default function RegisterScreen({ navigation }) {
     if (!validate()) return;
     setLoading(true);
     try {
-      const user = {
-        name: form.name.trim(),
+      // Cadastra na API e guarda o `id` retornado como credencial do app (§3).
+      const created = await createUser({
+        nome: form.name.trim(),
         email: form.email.trim().toLowerCase(),
+        senha: form.password,
+        telefone: onlyDigits(form.phone),
+        tipoUsuario: "CIDADAO",
+      });
+
+      // Mantemos a senha localmente porque o login é validado no app (a API
+      // não devolve nem valida senha — ARGOS-API-PARA-MOBILE.md §3).
+      const user = {
+        id: created.id,
+        name: created.nome,
+        email: created.email,
         phone: form.phone.trim(),
         password: form.password,
-        createdAt: new Date().toISOString(),
+        tipoUsuario: created.tipoUsuario,
+        createdAt: created.dataCriacao,
       };
-      await AsyncStorage.setItem("@argos:user", JSON.stringify(user));
-      await AsyncStorage.setItem("@argos:session", "true");
+      await saveSession(user);
       navigation.reset({ index: 0, routes: [{ name: "Tabs" }] });
-    } catch {
-      Alert.alert("Erro", "Não foi possível salvar os dados. Tente novamente.");
+    } catch (err) {
+      Alert.alert(
+        "Não foi possível criar a conta",
+        err.message ?? "Tente novamente.",
+      );
     } finally {
       setLoading(false);
     }

@@ -75,8 +75,12 @@ export default function MapaScreen() {
       setIsFallback(loc.isFallback);
       if (!loc.isFallback) animateTo(loc, scope);
       await loadRisk(loc, scope);
-      const list = await fetchIncidents();
-      if (active) setIncidents(list);
+      try {
+        const list = await fetchIncidents();
+        if (active) setIncidents(list);
+      } catch {
+        if (active) setIncidents([]);
+      }
     })();
     return () => {
       active = false;

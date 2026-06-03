@@ -8,11 +8,12 @@ import {
   Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
 
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import TextField from "../../components/ui/TextField";
+import { findUserByEmail } from "../../services/api/users";
+import { getStoredUser, saveSession } from "../../services/session";
 import { COLORS } from "../../constants/theme";
 import { maskEmail, isValidEmail } from "../../utils/masks";
 
@@ -31,27 +32,45 @@ export default function LoginScreen({ navigation }) {
     return Object.keys(next).length === 0;
   }
 
+  async function enterAs(user) {
+    await saveSession(user);
+    navigation.reset({ index: 0, routes: [{ name: "Tabs" }] });
+  }
+
   async function handleLogin() {
     if (!validate()) return;
     setLoading(true);
     try {
-      const raw = await AsyncStorage.getItem("@argos:user");
-      if (!raw) {
-        Alert.alert("Conta não encontrada", "Cadastre-se primeiro.");
+      // Busca a conta no servidor pelo e-mail (não há rota de login — §3).
+      // A senha não pode ser verificada no servidor (a API nunca a devolve).
+      const remote = await findUserByEmail(email);
+      if (!remote) {
+        Alert.alert(
+          "Conta não encontrada",
+          "Verifique o e-mail ou cadastre-se.",
+        );
         return;
       }
-      const user = JSON.parse(raw);
+      await enterAs({
+        id: remote.id,
+        name: remote.nome,
+        email: remote.email,
+        phone: remote.telefone ?? "",
+        tipoUsuario: remote.tipoUsuario,
+        createdAt: remote.dataCriacao,
+      });
+    } catch (err) {
+      // Servidor indisponível: tenta a conta salva neste aparelho (offline).
+      const local = await getStoredUser();
       if (
-        user.email !== email.trim().toLowerCase() ||
-        user.password !== password
+        local &&
+        local.email === email.trim().toLowerCase() &&
+        local.password === password
       ) {
-        Alert.alert("Credenciais inválidas", "E-mail ou senha incorretos.");
+        await enterAs(local);
         return;
       }
-      await AsyncStorage.setItem("@argos:session", "true");
-      navigation.reset({ index: 0, routes: [{ name: "Tabs" }] });
-    } catch {
-      Alert.alert("Erro", "Não foi possível fazer o login. Tente novamente.");
+      Alert.alert("Erro ao entrar", err.message ?? "Tente novamente.");
     } finally {
       setLoading(false);
     }

@@ -20,11 +20,15 @@ export default function AlertasScreen({ navigation }) {
   useFocusEffect(
     useCallback(() => {
       let active = true;
+      setLoading(true);
       (async () => {
-        const list = await fetchAlerts();
-        if (active) {
-          setAlerts(list);
-          setLoading(false);
+        try {
+          const list = await fetchAlerts();
+          if (active) setAlerts(list);
+        } catch {
+          if (active) setAlerts([]);
+        } finally {
+          if (active) setLoading(false);
         }
       })();
       return () => {

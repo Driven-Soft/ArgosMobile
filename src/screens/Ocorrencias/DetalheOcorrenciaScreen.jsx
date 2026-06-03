@@ -8,6 +8,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MapView, { Marker } from "react-native-maps";
@@ -16,7 +17,7 @@ import { Ionicons } from "@expo/vector-icons";
 import ScreenHeader from "../../components/ui/ScreenHeader";
 import RiskBadge from "../../components/ui/RiskBadge";
 import StatusPill from "../../components/ui/StatusPill";
-import { fetchComments } from "../../services/api/incidents";
+import { fetchComments, createComment } from "../../services/api/incidents";
 import { RISK_LEVELS } from "../../services/risk";
 import { COLORS, FONTS } from "../../constants/theme";
 import { formatRelativeTime, formatDistance } from "../../utils/format";
@@ -28,14 +29,18 @@ export default function DetalheOcorrenciaScreen({ route, navigation }) {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [draft, setDraft] = useState("");
+  const [sending, setSending] = useState(false);
 
   useEffect(() => {
     let active = true;
     (async () => {
-      const list = await fetchComments(incident.id);
-      if (active) {
-        setComments(list);
-        setLoading(false);
+      try {
+        const list = await fetchComments(incident.id);
+        if (active) setComments(list);
+      } catch {
+        if (active) setComments([]);
+      } finally {
+        if (active) setLoading(false);
       }
     })();
     return () => {
@@ -43,20 +48,22 @@ export default function DetalheOcorrenciaScreen({ route, navigation }) {
     };
   }, [incident.id]);
 
-  function sendComment() {
+  async function sendComment() {
     const text = draft.trim();
-    if (!text) return;
-    setComments((prev) => [
-      ...prev,
-      {
-        id: `local-${Date.now()}`,
-        author: "Você",
-        role: "cidadao",
-        text,
-        createdAt: new Date().toISOString(),
-      },
-    ]);
-    setDraft("");
+    if (!text || sending) return;
+    setSending(true);
+    try {
+      const created = await createComment(incident.id, text);
+      setComments((prev) => [...prev, created]);
+      setDraft("");
+    } catch (err) {
+      Alert.alert(
+        "Não foi possível enviar",
+        err.message ?? "Tente novamente.",
+      );
+    } finally {
+      setSending(false);
+    }
   }
 
   function openFullMap() {
@@ -200,8 +207,13 @@ export default function DetalheOcorrenciaScreen({ route, navigation }) {
               className="h-10 w-10 items-center justify-center rounded-full bg-primary"
               onPress={sendComment}
               activeOpacity={0.85}
+              disabled={sending}
             >
-              <Ionicons name="send" size={18} color="#ffffff" />
+              {sending ? (
+                <ActivityIndicator size="small" color="#ffffff" />
+              ) : (
+                <Ionicons name="send" size={18} color="#ffffff" />
+              )}
             </TouchableOpacity>
           </View>
         </KeyboardAvoidingView>

@@ -1,9 +1,32 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, TouchableOpacity, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import PrimaryButton from "../components/ui/PrimaryButton";
+import { USER_KEY, SESSION_KEY } from "../services/session";
 
 export default function WelcomeScreen({ navigation }) {
+  function handleClearData() {
+    Alert.alert(
+      "Limpar dados do app",
+      "Isso remove o cadastro e a sessão salvos neste dispositivo. Deseja continuar?",
+      [
+        { text: "Cancelar", style: "cancel" },
+        {
+          text: "Limpar",
+          style: "destructive",
+          onPress: async () => {
+            await AsyncStorage.multiRemove([USER_KEY, SESSION_KEY]);
+            Alert.alert(
+              "Dados removidos",
+              "Você já pode criar um novo cadastro.",
+            );
+          },
+        },
+      ],
+    );
+  }
+
   return (
     <SafeAreaView className="flex-1 px-6 bg-background">
       <View className="items-center pt-5">
@@ -49,6 +72,16 @@ export default function WelcomeScreen({ navigation }) {
           </Text>
           .
         </Text>
+
+        <TouchableOpacity
+          className="items-center pt-1"
+          onPress={handleClearData}
+          activeOpacity={0.6}
+        >
+          <Text className="text-xs font-medium text-textMutedColor underline">
+            Limpar dados do app
+          </Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );

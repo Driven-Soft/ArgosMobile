@@ -74,8 +74,11 @@ export default function RegistrarOcorrenciaScreen({ navigation }) {
       Alert.alert("Ocorrência registrada", "Obrigado por contribuir!", [
         { text: "OK", onPress: () => navigation.goBack() },
       ]);
-    } catch {
-      Alert.alert("Erro", "Não foi possível registrar. Tente novamente.");
+    } catch (err) {
+      Alert.alert(
+        "Não foi possível registrar",
+        err.message ?? "Tente novamente.",
+      );
     } finally {
       setSubmitting(false);
     }
