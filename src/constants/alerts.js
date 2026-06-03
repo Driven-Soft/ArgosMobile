@@ -1,3 +1,5 @@
+import { parseApiDate } from "../utils/format";
+
 export const FILTERS = [
   { key: "todos", label: "Todos" },
   { key: "ativos", label: "Ativos" },
@@ -22,7 +24,9 @@ export const RECOMMENDATIONS = [
 export const EMERGENCY_CONTACTS = "Defesa Civil 199 · Bombeiros 193";
 
 export function formatDateTime(iso) {
-  return new Date(iso).toLocaleString("pt-BR", {
+  const date = parseApiDate(iso);
+  if (!date) return "—";
+  return date.toLocaleString("pt-BR", {
     day: "2-digit",
     month: "2-digit",
     hour: "2-digit",
