@@ -41,7 +41,7 @@ export default function LoginScreen({ navigation }) {
     if (!validate()) return;
     setLoading(true);
     try {
-      // Busca a conta no servidor pelo e-mail (não há rota de login — §3).
+      // Busca a conta no servidor pelo e-mail (não há rota de login).
       // A senha não pode ser verificada no servidor (a API nunca a devolve).
       const remote = await findUserByEmail(email);
       if (!remote) {

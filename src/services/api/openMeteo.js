@@ -52,7 +52,7 @@ function lastNumber(arr) {
 
 /**
  * Busca dados meteorológicos para cada ponto do grid e calcula o risco.
- * Usa uma única chamada com coordenadas separadas por vírgula (ARGOS_SPEC §2.1).
+ * Usa uma única chamada com coordenadas separadas por vírgula.
  * @returns {Promise<Array<{ latitude, longitude, risk }>>}
  */
 export async function fetchRiskGrid(points) {

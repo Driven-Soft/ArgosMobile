@@ -71,7 +71,7 @@ export default function RegisterScreen({ navigation }) {
     if (!validate()) return;
     setLoading(true);
     try {
-      // Cadastra na API e guarda o `id` retornado como credencial do app (§3).
+      // Cadastra na API e guarda o `id` retornado como credencial do app.
       const created = await createUser({
         nome: form.name.trim(),
         email: form.email.trim().toLowerCase(),
@@ -80,8 +80,7 @@ export default function RegisterScreen({ navigation }) {
         tipoUsuario: "CIDADAO",
       });
 
-      // Mantemos a senha localmente porque o login é validado no app (a API
-      // não devolve nem valida senha — ARGOS-API-PARA-MOBILE.md §3).
+      // Mantemos a senha localmente porque o login é validado no app (a API não devolve nem valida senha)
       const user = {
         id: created.id,
         name: created.nome,

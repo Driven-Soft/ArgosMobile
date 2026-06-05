@@ -42,7 +42,7 @@ function levelFromScore(score) {
 }
 
 /**
- * Índice de risco de deslizamento (ARGOS_SPEC §3.1).
+ * Índice de risco de deslizamento.
  * @param {number} precipitacao24h soma de precipitation (hourly) das últimas 24h, em mm
  * @param {number} umidadeSolo soil_moisture_9_to_27cm, em m³/m³
  * @param {number} chuvaAtual precipitation (current), em mm
