@@ -17,6 +17,20 @@ export async function createUser({
   return data;
 }
 
+export async function updateUser(
+  id,
+  { nome, senha, telefone, tipoUsuario = "CIDADAO", ativo = true },
+) {
+  const { data } = await http.patch(`/usuarios/${id}`, {
+    nome,
+    senha,
+    telefone,
+    tipoUsuario,
+    ativo,
+  });
+  return data;
+}
+
 export async function getUser(id) {
   const { data } = await http.get(`/usuarios/${id}`);
   return data;

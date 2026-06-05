@@ -3,7 +3,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 import { COLORS, FONTS } from "../../constants/theme";
 
-export default function ScreenHeader({ title, onBack }) {
+export default function ScreenHeader({ title, onBack, trailing }) {
   const canGoBack = typeof onBack === "function";
 
   return (
@@ -18,12 +18,17 @@ export default function ScreenHeader({ title, onBack }) {
         </TouchableOpacity>
       )}
       <Text
-        className={`text-center text-[18px] ${canGoBack ? "px-10" : ""}`}
+        className={`text-center text-[18px] ${canGoBack || trailing ? "px-10" : ""}`}
         style={{ fontFamily: FONTS.bold, color: COLORS.primary }}
         numberOfLines={1}
       >
         {title}
       </Text>
+      {trailing && (
+        <View className="absolute inset-y-0 right-2 z-10 items-center justify-center">
+          {trailing}
+        </View>
+      )}
     </View>
   );
 }

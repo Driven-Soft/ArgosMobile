@@ -17,7 +17,12 @@ import { Ionicons } from "@expo/vector-icons";
 import ScreenHeader from "../../components/ui/ScreenHeader";
 import RiskBadge from "../../components/ui/RiskBadge";
 import StatusPill from "../../components/ui/StatusPill";
-import { fetchComments, createComment } from "../../services/api/incidents";
+import {
+  fetchComments,
+  createComment,
+  deleteIncident,
+} from "../../services/api/incidents";
+import { isOwnedIncident, removeOwnedIncident } from "../../services/session";
 import { RISK_LEVELS } from "../../services/risk";
 import { COLORS, FONTS } from "../../constants/theme";
 import { formatRelativeTime, formatDistance } from "../../utils/format";
@@ -30,13 +35,21 @@ export default function DetalheOcorrenciaScreen({ route, navigation }) {
   const [loading, setLoading] = useState(true);
   const [draft, setDraft] = useState("");
   const [sending, setSending] = useState(false);
+  const [isOwner, setIsOwner] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     let active = true;
     (async () => {
       try {
-        const list = await fetchComments(incident.id);
-        if (active) setComments(list);
+        const [list, owned] = await Promise.all([
+          fetchComments(incident.id),
+          isOwnedIncident(incident.id),
+        ]);
+        if (active) {
+          setComments(list);
+          setIsOwner(owned);
+        }
       } catch {
         if (active) setComments([]);
       } finally {
@@ -48,6 +61,36 @@ export default function DetalheOcorrenciaScreen({ route, navigation }) {
     };
   }, [incident.id]);
 
+  function confirmDelete() {
+    Alert.alert(
+      "Excluir ocorrência",
+      "Tem certeza que deseja excluir esta ocorrência? Esta ação não pode ser desfeita.",
+      [
+        { text: "Cancelar", style: "cancel" },
+        { text: "Excluir", style: "destructive", onPress: handleDelete },
+      ],
+    );
+  }
+
+  async function handleDelete() {
+    if (deleting) return;
+    setDeleting(true);
+    try {
+      await deleteIncident(incident.id);
+      await removeOwnedIncident(incident.id);
+      Alert.alert("Ocorrência excluída", "A ocorrência foi removida.", [
+        { text: "OK", onPress: () => navigation.goBack() },
+      ]);
+    } catch (err) {
+      Alert.alert(
+        "Não foi possível excluir",
+        err.message ?? "Tente novamente.",
+      );
+    } finally {
+      setDeleting(false);
+    }
+  }
+
   async function sendComment() {
     const text = draft.trim();
     if (!text || sending) return;
@@ -57,10 +100,7 @@ export default function DetalheOcorrenciaScreen({ route, navigation }) {
       setComments((prev) => [...prev, created]);
       setDraft("");
     } catch (err) {
-      Alert.alert(
-        "Não foi possível enviar",
-        err.message ?? "Tente novamente.",
-      );
+      Alert.alert("Não foi possível enviar", err.message ?? "Tente novamente.");
     } finally {
       setSending(false);
     }
@@ -76,6 +116,26 @@ export default function DetalheOcorrenciaScreen({ route, navigation }) {
         <ScreenHeader
           title="Detalhes da ocorrência"
           onBack={() => navigation.goBack()}
+          trailing={
+            isOwner ? (
+              <TouchableOpacity
+                className="h-10 w-10 items-center justify-center"
+                onPress={confirmDelete}
+                disabled={deleting}
+                activeOpacity={0.7}
+              >
+                {deleting ? (
+                  <ActivityIndicator size="small" color={COLORS.error} />
+                ) : (
+                  <Ionicons
+                    name="trash-outline"
+                    size={22}
+                    color={COLORS.error}
+                  />
+                )}
+              </TouchableOpacity>
+            ) : null
+          }
         />
 
         <KeyboardAvoidingView

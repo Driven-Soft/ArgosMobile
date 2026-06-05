@@ -1,5 +1,5 @@
 import { http } from "../http";
-import { getCurrentUserId } from "../session";
+import { getCurrentUserId, addOwnedIncident } from "../session";
 import { resolveTypeId } from "./types";
 
 // Ocorrências e comentários — /ocorrencias
@@ -71,7 +71,15 @@ export async function createIncident({
     latitude,
     longitude,
   });
-  return mapIncident(data);
+  const incident = mapIncident(data);
+  // A API não devolve o autor; guardamos o id localmente para liberar a
+  // exclusão posteriormente (ver session.js).
+  await addOwnedIncident(incident.id);
+  return incident;
+}
+
+export async function deleteIncident(id) {
+  await http.delete(`/ocorrencias/${id}`);
 }
 
 export async function createComment(incidentId, message) {

@@ -17,6 +17,11 @@ import { COLORS, FONTS } from "../constants/theme";
 
 const MENU_ITEMS = [
   {
+    id: "edit",
+    icon: "create-outline",
+    label: "Editar Perfil",
+  },
+  {
     id: "alerts",
     icon: "notifications-outline",
     label: "Histórico de Alertas",
@@ -49,6 +54,10 @@ export default function PerfilScreen({ navigation }) {
   );
 
   function handleMenuPress(item) {
+    if (item.id === "edit") {
+      navigation.navigate("EditarPerfil");
+      return;
+    }
     if (item.id === "alerts") {
       navigation.navigate("Alertas");
       return;
