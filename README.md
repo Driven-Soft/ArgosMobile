@@ -162,7 +162,7 @@ Argos/
 
 - Node.js 18.x ou superior
 - Emulador Android/iOS ou dispositivo físico com o **Expo Go** instalado
-- A **API .NET do Argos** rodando e acessível na rede (necessária para o CRUD)
+- A **API .NET do Argos** já está hospedada em produção no Render — não é preciso rodar nada localmente para o CRUD funcionar
 
 ### 1. App mobile
 
@@ -183,20 +183,22 @@ npm run ios
 npm run web
 ```
 
-### 2. Configurar a API .NET
+### 2. API .NET (produção)
 
-O endereço da API é definido em [`src/config/api.js`](./src/config/api.js). Ajuste o `HOST` para o IP da máquina onde a API está rodando, conforme o ambiente:
+O endereço da API é definido em [`src/config/api.js`](./src/config/api.js). Por padrão o app já aponta para a **API em produção no Render**, então não é necessário configurar nada para os recursos de alertas e ocorrências (CRUD) funcionarem:
 
 ```js
-const HOST = "192.168.15.6"; // IP da sua máquina na rede Wi-Fi
-const PORT = 5084;
+export const API_BASE_URL = "https://argosapi-net.onrender.com";
 ```
 
-- **Celular físico (Expo Go):** IP da máquina na Wi-Fi (geralmente o mesmo que o Expo exibe ao iniciar).
-- **Emulador Android:** `10.0.2.2`
-- **Simulador iOS:** `localhost`
+Os endpoints respondem direto nas rotas dos controllers, por exemplo:
 
-> ⚠️ Use **HTTP** (não HTTPS) em desenvolvimento. Sem a API no ar, as funcionalidades de alertas e ocorrências (CRUD) não carregam — o mapa de risco por satélite continua funcionando, pois usa a Open-Meteo diretamente.
+- `GET https://argosapi-net.onrender.com/tipos-ocorrencia`
+- `GET https://argosapi-net.onrender.com/ocorrencias`
+
+> ⏱️ **Cold start (free tier do Render):** após ~15 min sem tráfego o serviço "dorme". A **primeira** request do app pode levar **30–50s** para acordar o servidor; as seguintes são rápidas. Por isso o timeout do cliente HTTP foi aumentado para **60s** em [`src/services/http.js`](./src/services/http.js).
+
+> ℹ️ Mesmo sem a API, o mapa de risco por satélite continua funcionando, pois usa a Open-Meteo diretamente.
 
 ---
 

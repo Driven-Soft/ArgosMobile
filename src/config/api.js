@@ -1,15 +1,12 @@
 // Configuração da base URL da API .NET do Argos.
 //
-// Em desenvolvimento use HTTP puro (NÃO https).
-// `HOST` deve ser o IP da máquina que roda a API na rede Wi-Fi — costuma ser o
-// mesmo IP que o Metro/Expo exibe ao iniciar. Ele muda conforme o DHCP do
-// roteador, então atualize quando necessário.
+// PRODUÇÃO (padrão): a API está hospedada no Render e é consumida via HTTPS.
+// Essa é a URL que o app mobile deve usar normalmente.
 //
-//   • Celular físico (Expo Go):  IP da máquina na Wi-Fi (ex.: "192.168.15.6")
-//   • Emulador Android:          "10.0.2.2"
-//   • Simulador iOS:             "localhost"
+//   https://argosapi-net.onrender.com
+//
+// ⚠️ Cold start (free tier do Render): após ~15 min sem tráfego o serviço
+// "dorme". A primeira request pode levar 30–50s para acordar; as seguintes
+// são rápidas. Por isso o timeout do cliente HTTP é generoso (ver http.js).
 
-const HOST = "192.168.15.6";
-const PORT = 5084;
-
-export const API_BASE_URL = `http://${HOST}:${PORT}`;
+export const API_BASE_URL = "https://argosapi-net.onrender.com";
