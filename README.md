@@ -183,6 +183,10 @@ npm run ios
 npm run web
 ```
 
+> ⏱️ **ATENÇÃO!!! - Cold start (free tier do Render):** A **primeira** request do app pode levar **30–50s** para acordar o servidor; as seguintes são rápidas.
+> Após ~15 min sem tráfego na API, o serviço "dorme".
+> Por isso o timeout do cliente HTTP foi aumentado para **60s** em [`src/services/http.js`](./src/services/http.js).
+
 ### 2. API .NET (produção)
 
 O endereço da API é definido em [`src/config/api.js`](./src/config/api.js). Por padrão o app já aponta para a **API em produção no Render**, então não é necessário configurar nada para os recursos de alertas e ocorrências (CRUD) funcionarem:
@@ -195,8 +199,6 @@ Os endpoints respondem direto nas rotas dos controllers, por exemplo:
 
 - `GET https://argosapi-net.onrender.com/tipos-ocorrencia`
 - `GET https://argosapi-net.onrender.com/ocorrencias`
-
-> ⏱️ **Cold start (free tier do Render):** após ~15 min sem tráfego o serviço "dorme". A **primeira** request do app pode levar **30–50s** para acordar o servidor; as seguintes são rápidas. Por isso o timeout do cliente HTTP foi aumentado para **60s** em [`src/services/http.js`](./src/services/http.js).
 
 > ℹ️ Mesmo sem a API, o mapa de risco por satélite continua funcionando, pois usa a Open-Meteo diretamente.
 
