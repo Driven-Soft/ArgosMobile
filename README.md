@@ -167,7 +167,7 @@ Argos/
 ### 1. App mobile
 
 ```bash
-git clone <URL-do-repositorio>
+git clone https://github.com/Driven-Soft/ArgosMobile
 cd Argos
 npm install
 npm start
