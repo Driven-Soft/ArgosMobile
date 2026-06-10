@@ -1,6 +1,5 @@
-import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
+import { StackActions } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "../constants/theme";
 
@@ -11,6 +10,20 @@ import AlertasRoutes from "../routes/alertas.routes";
 import PerfilScreen from "../screens/PerfilScreen";
 
 const Tab = createBottomTabNavigator();
+
+function resetStackOnTabPress({ navigation, route }) {
+  return {
+    tabPress: () => {
+      const stack = route.state;
+      if (navigation.isFocused() && stack?.key && stack.index > 0) {
+        navigation.dispatch({
+          ...StackActions.popToTop(),
+          target: stack.key,
+        });
+      }
+    },
+  };
+}
 
 export default function Tabs() {
   return (
@@ -54,8 +67,18 @@ export default function Tabs() {
     >
       <Tab.Screen name="Inicio" component={HomeScreen} />
       <Tab.Screen name="Mapa" component={MapaScreen} />
-      <Tab.Screen name="Alertas" component={AlertasRoutes} />
-      <Tab.Screen name="Ocorrencias" component={OcorrenciasRoutes} />
+      <Tab.Screen
+        name="Alertas"
+        component={AlertasRoutes}
+        options={{ popToTopOnBlur: true }}
+        listeners={resetStackOnTabPress}
+      />
+      <Tab.Screen
+        name="Ocorrencias"
+        component={OcorrenciasRoutes}
+        options={{ popToTopOnBlur: true }}
+        listeners={resetStackOnTabPress}
+      />
       <Tab.Screen name="Perfil" component={PerfilScreen} />
     </Tab.Navigator>
   );

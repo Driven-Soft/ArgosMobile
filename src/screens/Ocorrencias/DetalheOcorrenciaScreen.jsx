@@ -25,7 +25,7 @@ import {
 import { isOwnedIncident, removeOwnedIncident } from "../../services/session";
 import { RISK_LEVELS } from "../../services/risk";
 import { COLORS, FONTS } from "../../constants/theme";
-import { formatRelativeTime, formatDistance } from "../../utils/format";
+import { formatRelativeTime } from "../../utils/format";
 
 export default function DetalheOcorrenciaScreen({ route, navigation }) {
   const { incident } = route.params;
@@ -199,9 +199,6 @@ export default function DetalheOcorrenciaScreen({ route, navigation }) {
                     style={{ fontFamily: FONTS.regular }}
                   >
                     {incident.neighborhood}
-                    {incident.distance
-                      ? `, ${formatDistance(incident.distance)}`
-                      : ""}
                   </Text>
                 </View>
               </View>

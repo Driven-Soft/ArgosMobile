@@ -21,7 +21,7 @@ import { fetchIncidents } from "../../services/api/incidents";
 import { RISK_LEVELS } from "../../services/risk";
 import { INCIDENT_TYPES } from "../../constants/incidents";
 import { COLORS, FONTS } from "../../constants/theme";
-import { formatRelativeTime, formatDistance } from "../../utils/format";
+import { formatRelativeTime } from "../../utils/format";
 
 export default function OcorrenciasScreen({ navigation }) {
   const [incidents, setIncidents] = useState([]);
@@ -226,9 +226,6 @@ function IncidentCard({ incident, onPress }) {
               style={{ fontFamily: FONTS.regular }}
             >
               {incident.neighborhood}
-              {incident.distance
-                ? `, ${formatDistance(incident.distance)}`
-                : ""}
             </Text>
           </View>
         </View>

@@ -16,8 +16,3 @@ export function formatRelativeTime(iso) {
   if (h < 24) return `Há ${h} h`;
   return `Há ${Math.floor(h / 24)} d`;
 }
-
-export function formatDistance(meters) {
-  if (meters < 1000) return `a ${meters} m`;
-  return `a ${(meters / 1000).toFixed(1).replace(".", ",")} km`;
-}

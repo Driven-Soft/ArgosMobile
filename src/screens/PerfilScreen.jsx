@@ -66,7 +66,6 @@ export default function PerfilScreen({ navigation }) {
       navigation.navigate("Ocorrencias");
       return;
     }
-    Alert.alert("Em breve", "Esta funcionalidade estará disponível em breve.");
   }
 
   function handleLogout() {

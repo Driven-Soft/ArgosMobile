@@ -14,6 +14,8 @@ const geocodingClient = axios.create({
 
 const TIMEZONE = "America/Sao_Paulo";
 
+const PAST_HOURS = 24;
+
 export const GRID_SPACING = {
   cidade: 0.08, // ~9 km — visão local
   estado: 0.3, // ~33 km — visão regional
@@ -65,7 +67,7 @@ export async function fetchRiskGrid(points) {
       longitude,
       current: "precipitation,rain,weather_code",
       hourly: "precipitation,soil_moisture_9_to_27cm",
-      past_hours: 24,
+      past_hours: PAST_HOURS,
       forecast_hours: 1,
       timezone: TIMEZONE,
     },
@@ -75,7 +77,7 @@ export async function fetchRiskGrid(points) {
 
   return locations.map((loc, index) => {
     const base = points[index] ?? points[0];
-    const precip24h = sum(loc?.hourly?.precipitation);
+    const precip24h = sum(loc?.hourly?.precipitation?.slice(0, PAST_HOURS));
     const soilMoisture = lastNumber(loc?.hourly?.soil_moisture_9_to_27cm);
     const currentRain = loc?.current?.precipitation ?? 0;
 

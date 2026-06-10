@@ -23,8 +23,3 @@ export async function fetchAlerts() {
   const { data } = await http.get("/alertas");
   return (data ?? []).map(mapAlert);
 }
-
-export async function getAlert(id) {
-  const { data } = await http.get(`/alertas/${id}`);
-  return data ? mapAlert(data) : null;
-}

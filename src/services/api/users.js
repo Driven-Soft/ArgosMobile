@@ -31,11 +31,6 @@ export async function updateUser(
   return data;
 }
 
-export async function getUser(id) {
-  const { data } = await http.get(`/usuarios/${id}`);
-  return data;
-}
-
 export async function findUserByEmail(email) {
   const { data } = await http.get("/usuarios");
   const target = (email ?? "").trim().toLowerCase();

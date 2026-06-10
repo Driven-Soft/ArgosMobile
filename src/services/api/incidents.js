@@ -13,7 +13,6 @@ function mapIncident(o) {
     status: (o.status ?? "EM_ANALISE").toLowerCase(),
     description: o.descricao,
     neighborhood: o.bairro ?? "Local reportado",
-    distance: null,
     latitude: o.latitude,
     longitude: o.longitude,
     createdAt: o.dataCriacao,
@@ -33,11 +32,6 @@ function mapComment(c) {
 export async function fetchIncidents() {
   const { data } = await http.get("/ocorrencias");
   return (data ?? []).map(mapIncident);
-}
-
-export async function getIncident(id) {
-  const { data } = await http.get(`/ocorrencias/${id}`);
-  return data ? mapIncident(data) : null;
 }
 
 export async function fetchComments(incidentId) {
