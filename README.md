@@ -29,12 +29,11 @@ O resultado é uma plataforma de segurança pública que transforma dados de sat
 
 O coração técnico do Argos é o consumo de **dados de observação da Terra** através da **Open-Meteo API** (gratuita, sem chave). Esses dados são derivados de **satélites e modelos de reanálise alimentados por sensoriamento remoto**:
 
-| Dado utilizado | Origem (sensoriamento remoto / satélite) | Uso no Argos |
+| Dado | Origem (sensoriamento remoto / satélite) | Uso no Argos |
 | --- | --- | --- |
-| **Vazão fluvial** (`river_discharge`) | **GloFAS** (Global Flood Awareness System / Copernicus), resolução de 5 km | Detecção de risco de **inundação** por transbordamento de rios |
-| **Umidade do solo** (`soil_moisture_9_to_27cm`) | Modelos de reanálise (ERA5) alimentados por satélites de umidade do solo | Fator estrutural do risco de **deslizamento** |
-| **Precipitação acumulada e atual** | Reanálise meteorológica + estimativas de precipitação por satélite | Gatilho principal do cálculo de risco |
-| **Elevação do terreno** | **DEM** (Modelo Digital de Elevação) de 90 m, derivado de missões orbitais | Refino do risco de deslizamento por declividade |
+| **Precipitação acumulada e atual** | Reanálise meteorológica + estimativas de precipitação por satélite | ✅ Em uso — gatilho principal do cálculo de risco |
+| **Umidade do solo** (`soil_moisture_9_to_27cm`) | Modelos de reanálise (ERA5) alimentados por satélites de umidade do solo | ✅ Em uso — fator estrutural do risco de **deslizamento** |
+| **Elevação do terreno** | **DEM** (Modelo Digital de Elevação) de 90 m, derivado de missões orbitais | 🔭 Planejado — refino do risco por declividade (API mapeada, ainda não consumida) |
 
 Esses dados são cruzados em um **índice de risco** calculado no próprio app (ver seção *Cálculo de Risco*) e projetados sobre um **mapa de calor** ao redor da posição do usuário. É exatamente a proposta da GS: **pegar dados que vêm do espaço e transformá-los em prevenção concreta na vida das pessoas.**
 
@@ -44,13 +43,13 @@ Esses dados são cruzados em um **índice de risco** calculado no próprio app (
 
 ## Funcionalidades
 
-- 🛰️ **Mapa de Risco (Heatmap)** — grid de coordenadas ao redor do usuário; para cada ponto, o risco de inundação/deslizamento é calculado a partir de dados de satélite e exibido com escala semântica de cores (verde → amarelo → laranja → vermelho).
-- 🌧️ **Dashboard / Card Hero** — nível de risco atual da sua localização, precipitação nas últimas 24h, condição climática e probabilidade de chuva.
+- 🛰️ **Mapa de Risco** — grid de coordenadas ao redor do usuário; para cada ponto, o índice de risco é calculado a partir de dados de satélite (precipitação 24h, umidade do solo e chuva atual) e exibido com escala semântica de cores (verde → amarelo → laranja → vermelho).
+- 🌧️ **Zonas Próximas** — bottom sheet no mapa com o ranking das zonas monitoradas ao redor, score de risco e precipitação acumulada (24h) de cada uma, com busca de endereços (geocoding) e filtros Cidade/Estado.
 - 🚨 **Alertas em tempo real** — feed de alertas oficiais com filtros (Todos / Ativos / Críticos), badge de severidade e tela de detalhamento com mapa e recomendações.
 - 📍 **Reporte de ocorrências (crowdsourcing)** — o cidadão registra rua alagada, queda de barreira, etc., com geolocalização automática e ajuste manual do pino no mapa.
 - 💬 **Comunicação por ocorrência** — feed de atualizações estilo chat dentro de cada ocorrência.
 - 🗑️ **Gestão das próprias ocorrências** — o autor pode excluir as ocorrências que registrou.
-- 👤 **Perfil do usuário** — cadastro, login, edição de dados e histórico.
+- 👤 **Perfil do usuário** — cadastro, login e edição de dados.
 
 ---
 
@@ -77,7 +76,7 @@ Navegação com **React Navigation** (Stack raiz + Bottom Tabs), com mais de 5 t
 
 - **Autenticação:** Welcome, Login, Cadastro
 - **Bottom Tabs:** Início, Mapa, Alertas, Ocorrências, Perfil
-- **Fluxos:** Detalhe do Alerta, Detalhe da Ocorrência, Registrar Ocorrência, Editar Perfil, Detalhe da Zona, Notificações, Busca
+- **Fluxos:** Detalhe do Alerta, Detalhe da Ocorrência, Registrar Ocorrência, Editar Perfil
 
 ---
 
@@ -94,7 +93,7 @@ score = (precipitação24h × 0.55) + (umidadeSolo × 0.20) + (chuvaAtual × 0.2
 | 🟢 Baixo | 0.00 – 0.24 | `#22C55E` | Situação normal |
 | 🟡 Médio | 0.25 – 0.49 | `#EAB308` | Atenção recomendada |
 | 🟠 Alto | 0.50 – 0.74 | `#F97316` | Risco real, evite áreas baixas |
-| 🔴 Crítico | 0.75 – 1.00 | `#EF4444` | Perigo iminente, busque local seguro |
+| 🔴 Crítico | 0.75 – 1.00 | `#DC2626` | Perigo iminente, busque local seguro |
 
 ---
 
@@ -114,11 +113,10 @@ score = (precipitação24h × 0.55) + (umidadeSolo × 0.20) + (chuvaAtual × 0.2
 | @expo/vector-icons | ^15.0.3 | Ícones da interface |
 | nativewind | ^4.2.4 | Estilização Tailwind CSS para React Native |
 | tailwindcss | ^3.4.19 | Utilitários CSS e tokens de design |
-| react-native-reanimated / worklets | ~4.1.1 / 0.5.1 | Animações fluidas (bottom sheet, transições) |
+| react-native-reanimated / worklets | ~4.1.1 / 0.5.1 | Dependência de animações exigida pelo NativeWind v4 |
 | react-native-gesture-handler | ~2.28.0 | Gestos e interações de toque |
 | react-native-safe-area-context | ~5.6.0 | Respeito às áreas seguras de tela |
 | react-native-screens | ~4.16.0 | Otimização de telas e navegação |
-| react-native-web | ^0.21.0 | Suporte de execução no navegador |
 | prettier-plugin-tailwindcss | ^0.5.14 | Formatação consistente de código e classes Tailwind |
 
 ---
@@ -141,7 +139,7 @@ Argos/
    │  ├─ map/                  # MapSearchBar, NearbyZonesSheet, RiskLegend
    │  └─ ui/                   # AlertCard, RiskBadge, FAB, ScreenHeader, TextField...
    ├─ config/
-   │  └─ api.js                # Base URL da API .NET (HOST/PORT configuráveis)
+   │  └─ api.js                # Base URL da API .NET (produção no Render)
    ├─ constants/               # theme.js, alerts.js, incidents.js
    ├─ routes/                  # stack / tab / alertas / ocorrencias (React Navigation)
    ├─ screens/                 # Telas e seus sub-módulos (Alertas, Ocorrencias, auth...)
@@ -179,9 +177,9 @@ Para rodar diretamente:
 npm run android
 # ou
 npm run ios
-# ou
-npm run web
 ```
+
+> ⚠️ O projeto é mobile-only (Android/iOS): as telas de mapa usam `react-native-maps`, que não tem suporte web.
 
 ### 2. API .NET (produção)
 
